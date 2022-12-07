@@ -277,7 +277,20 @@ def report_progress(typed, prompt, user_id, upload):
     0.2
     """
     # BEGIN PROBLEM 8
-    "*** YOUR CODE HERE ***"
+    wordsAreCorrect = True
+    number_of_correct_words = 0
+    i = 0
+    while wordsAreCorrect and i < len(typed):
+        if typed[i] == prompt[i]:
+            number_of_correct_words += 1
+            i = i + 1
+        else:
+            wordsAreCorrect = False
+
+    progress = number_of_correct_words/len(prompt)
+    x = {'id': user_id, 'progress': progress}
+    upload(x)
+    return progress
     # END PROBLEM 8
 
 
@@ -299,7 +312,13 @@ def time_per_word(words, times_per_player):
     [[6, 3, 6, 2], [10, 6, 1, 2]]
     """
     # BEGIN PROBLEM 9
-    "*** YOUR CODE HERE ***"
+    def timer(s):
+        return [s[x+1]-s[x] for x in range(len(s)-1)]
+
+    def timing(s):
+        return [timer(x) for x in s]
+
+    return match(words, timing(times_per_player))
     # END PROBLEM 9
 
 
@@ -321,7 +340,27 @@ def fastest_words(match):
     player_indices = range(len(get_all_times(match)))  # contains an *index* for each player
     word_indices = range(len(get_all_words(match)))    # contains an *index* for each word
     # BEGIN PROBLEM 10
-    "*** YOUR CODE HERE ***"
+    #[x for x in x if x]
+    #get_word(match, word_index)
+    #time(match, player_num, word_index)
+    scores = []
+    for _ in player_indices:
+        scores += [[]]
+    i = 0
+    while i < words_indices:
+        word = get_word(match, i)
+        j = 0
+        lowest_time = [0, 100000000]
+        for j in len(scores):
+            player_time = time(match, j, i) 
+            if player_time <= lowest_time:
+                lowest_time[0] = j
+                lowest_time[1] = player_time
+            j += 1
+        scores[[lowest_time[0]]] += [word]
+        i += 1
+    return scores
+
     # END PROBLEM 10
 
 
