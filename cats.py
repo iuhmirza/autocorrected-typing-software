@@ -153,7 +153,14 @@ def autocorrect(typed_word, word_list, diff_function, limit):
     'testing'
     """
     # BEGIN PROBLEM 5
-    "*** YOUR CODE HERE ***"
+    if typed_word in word_list:
+        return typed_word
+    else:
+        x = min(word_list, key = lambda k: diff_function(typed_word, k, limit))
+        if diff_function(typed_word, x, limit) > limit:
+            return typed_word
+        else:
+            return x
     # END PROBLEM 5
 
 
@@ -180,7 +187,23 @@ def feline_fixes(typed, source, limit):
     5
     """
     # BEGIN PROBLEM 6
-    assert False, 'Remove this line'
+    print('DEBUG:', typed, source)
+    if (not typed) or (not source):
+        return 0
+    elif limit < 0:
+        return 10000000
+    else:
+        if len(typed) < len(source):
+            difference = len(source) - len(typed)
+            return feline_fixes(typed, source[:len(typed)], limit - difference) + difference
+        elif len(typed) > len(source):
+            difference = len(typed) - len(source)
+            return feline_fixes(typed[:len(source)], source, limit - difference) + difference
+        else:
+            if typed[-1] == source[-1]:
+                return feline_fixes(typed[:len(typed)-1], source[:len(source)-1], limit)
+            else:
+                return feline_fixes(typed[:len(typed)-1], source[:len(source)-1], limit - 1) + 1
     # END PROBLEM 6
 
 
@@ -199,22 +222,21 @@ def minimum_mewtations(start, goal, limit):
     >>> minimum_mewtations("ckiteus", "kittens", big_limit) # ckiteus -> kiteus -> kitteus -> kittens
     3
     """
-    assert False, 'Remove this line'
-    if ______________:  # Fill in the condition
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
-    elif ___________:  # Feel free to remove or add additional cases
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
+    print('DEBUG:', start, goal)
+    if start == goal:
+        return 0
+    elif (not start) or (not goal):
+        return len(start) or len(goal)
+    elif limit < 0:
+        return 1000000
+    elif start[0] == goal[0]:
+        return minimum_mewtations(start[1:], goal[1:], limit)
     else:
-        add = ...  # Fill in these lines
-        remove = ...
-        substitute = ...
-        # BEGIN
-        "*** YOUR CODE HERE ***"
-        # END
+        add = minimum_mewtations(goal[0]+start, goal, limit-1) + 1
+        remove = minimum_mewtations(start[1:], goal, limit-1) + 1
+        substitute = minimum_mewtations(goal[0] + start[1:], goal, limit-1) + 1
+        return min(add, remove, substitute)
+        
 
 
 def final_diff(typed, source, limit):
